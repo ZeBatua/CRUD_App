@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-// общается со саписком извекает людей из всписксма нахъодить человека, джобавлят, обнволять и удалять
 @Component
 public class PersonDAO {
     private static int PEOPLE_COUNT;
@@ -36,6 +35,8 @@ public class PersonDAO {
         Person personToBeUpdated = show(id);
         personToBeUpdated.setName(updatedPerson.getName());
     }
-
+    public void delete(int id) {
+        people.removeIf(p -> p.getId() == id);
+    }
 
 }
