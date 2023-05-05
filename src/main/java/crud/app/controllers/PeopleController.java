@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/people")
-public class PeopleController {//---
+public class PeopleController {
 
     private final PersonDAO personDAO;
 
@@ -50,7 +50,7 @@ public class PeopleController {//---
         return "people/edit";
     }
 
-    @PatchMapping("/{id}") // My
+    @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
@@ -59,16 +59,6 @@ public class PeopleController {//---
         personDAO.update(id, person);
         return "redirect:/people";
     }
-
-//    @PatchMapping("/{id}") // Nail
-//    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
-//                         @PathVariable("id") int id) {
-//        if (bindingResult.hasErrors())
-//            return "people/edit";
-//
-//        personDAO.update(id, person);
-//        return "redirect:/people";
-//    }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
