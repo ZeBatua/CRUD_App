@@ -1,9 +1,22 @@
 package crud.app.models;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 public class Person {
     private int id;
+
+    @Min(value = 0, message = "The age can't be less then 0")
     private int age;
+
+    @NotEmpty(message = "Name can't be empty")
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String name;
+
+    @NotEmpty(message = "Email can't be empty")
+    @Email(message = "Not an email format")
     private String email;
 
     public Person() {
