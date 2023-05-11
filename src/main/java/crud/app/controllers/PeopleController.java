@@ -68,4 +68,10 @@ public class PeopleController {
         personDAO.delete(id);
         return "redirect:/people";
     }
+
+    @DeleteMapping()
+    public String deleteAll() {
+        personDAO.deleteAll();
+        return "redirect:/people";
+    }
 }
