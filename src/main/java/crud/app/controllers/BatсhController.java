@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/test-batch-update")
-public class BathController {
+public class BatсhController {
     PersonDAO personDAO;
 
     @Autowired
-    public BathController(PersonDAO personDAO) {
+    public BatсhController(PersonDAO personDAO) {
         this.personDAO = personDAO;
     }
 
@@ -23,13 +23,13 @@ public class BathController {
 
     @GetMapping("/without")
     public String withoutBatch() {
-        personDAO.testMultiplyUpdate();
+        personDAO.testMultipleUpdate();
         return "redirect:/people";
     }
 
     @GetMapping("/with")
     public String withBatch() {
-        personDAO.testButchUpdate();
+        personDAO.testBatchUpdate();
         return "redirect:/people";
 
     }
