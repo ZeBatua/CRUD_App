@@ -11,10 +11,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PersonDAO {
     private final JdbcTemplate jdbcTemplate;
+    private static int bathUseCounter;
 
     @Autowired
     public PersonDAO(JdbcTemplate jdbcTemplate) {
@@ -28,6 +30,11 @@ public class PersonDAO {
     public Person show(int id) {
         return jdbcTemplate.query("SELECT * FROM Person WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
                 .stream().findAny().orElse(null);
+    }
+
+    public Optional<Person> show(String email) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE email=?", new Object[]{email}, new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny();
     }
 
     public void save(Person person) {
@@ -47,21 +54,21 @@ public class PersonDAO {
         jdbcTemplate.update("TRUNCATE TABLE person");
     }
 
-    public void testMultiplyUpdate() {
+    public void testMultipleUpdate() {
         List<Person> people = create1000People();
-
-        long start = System.currentTimeMillis();
+        long before = System.currentTimeMillis();
         for (Person person : people) {
-            jdbcTemplate.update("INSERT INTO person VALUES(?, ?, ?, ?)",
+            jdbcTemplate.update("INSERT INTO Person VALUES(?, ?, ?, ?)",
                     person.getId(), person.getName(), person.getAge(), person.getEmail());
         }
-        long end = System.currentTimeMillis();
-        System.out.println("Time: " + (end -start));
+        long after = System.currentTimeMillis();
+        System.out.println("Time: " + (after - before));
     }
-    public void testButchUpdate() {
+
+    public void testBatchUpdate() {
         List<Person> people = create1000People();
-        long start = System.currentTimeMillis();
-        jdbcTemplate.batchUpdate("INSERT INTO person VALUES(?, ?, ?, ?)",
+        long before = System.currentTimeMillis();
+        jdbcTemplate.batchUpdate("INSERT INTO Person VALUES(?, ?, ?, ?)",
                 new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -70,22 +77,24 @@ public class PersonDAO {
                         ps.setInt(3, people.get(i).getAge());
                         ps.setString(4, people.get(i).getEmail());
                     }
-
                     @Override
                     public int getBatchSize() {
                         return people.size();
                     }
                 });
-        long end = System.currentTimeMillis();
-        System.out.println("Time: " + (end -start));
+
+        long after = System.currentTimeMillis();
+        System.out.println("Time: " + (after - before));
     }
 
 
     private List<Person> create1000People() {
         List<Person> people = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
-            people.add(new Person(i, "test" + i, i+100, "test" + i + "@mail.com"));
+        int amount = 10; // 1000 default
+        for (int i = (bathUseCounter == 0 ? 0 : bathUseCounter * amount);  i < amount * (bathUseCounter + 1); i++) {
+            people.add(new Person(i, "test" + i, i, "test" + i + "@mail.com"));
         }
+        bathUseCounter++;
         return people;
     }
 }

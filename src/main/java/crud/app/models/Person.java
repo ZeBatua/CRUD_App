@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 public class Person {
     private int id;
 
-    @Min(value = 0, message = "The age can't be less then 0")
+    @Min(value = -1, message = "The age can't be less then 0")
     private int age;
 
     @NotEmpty(message = "Name can't be empty")
