@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/test-batch-update")
-public class BatсhController {
+public class BatchController {
+
     PersonDAO personDAO;
 
     @Autowired
-    public BatсhController(PersonDAO personDAO) {
+    public BatchController(PersonDAO personDAO) {
         this.personDAO = personDAO;
     }
 
