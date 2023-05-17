@@ -79,4 +79,5 @@ public class PeopleController {
         personDAO.deleteAll();
         return "redirect:/people";
     }
+
 }
